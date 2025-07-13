@@ -1,0 +1,46 @@
+{
+  "name": "lpl-demo",
+  "version": "1.0.0",
+  "description": "A demonstration project showcasing various integrations and technologies",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "build": "echo 'Build script placeholder'",
+    "clean": "rm -rf dist/ build/ node_modules/"
+  },
+  "keywords": [
+    "demo",
+    "integration",
+    "api",
+    "nodejs"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "jest": "^29.7.0",
+    "eslint": "^8.54.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/LPL-Demo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/LPL-Demo/issues"
+  },
+  "homepage": "https://github.com/yourusername/LPL-Demo#readme"
+} 
