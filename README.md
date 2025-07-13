@@ -1,20 +1,17 @@
 # LPL-Demo
 
-A demonstration project showcasing various integrations and technologies.
+A demonstration project showcasing integrations between JIRA, MySQL, Docker, and Model Context Protocol (MCP).
 
 ## Project Structure
 
 ```
 LPL-Demo/
-├── src/                    # Source code
-├── tests/                  # Test files
-├── docs/                   # Documentation
-├── config/                 # Configuration files
-├── scripts/                # Utility scripts
-├── data/                   # Data files
-├── .github/                # GitHub workflows
-├── docker/                 # Docker configurations
-└── README.md              # This file
+├── docker-compose.yaml        # Multi-service Docker setup (JIRA, MySQL, Postgres)
+├── requirements.txt           # Python dependencies
+├── package.json               # Node.js dependencies
+├── env.example                # Example environment variables
+├── README.md                  # This file
+└── ...                        # Other project files
 ```
 
 ## Getting Started
@@ -23,13 +20,14 @@ LPL-Demo/
 
 - Node.js (v18 or higher)
 - Python (v3.8 or higher)
-- Docker (optional)
+- Docker
+- Access to a JIRA instance (local or cloud)
 
 ### Installation
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/vsusheel/LPL-Demo.git
    cd LPL-Demo
    ```
 
@@ -41,28 +39,45 @@ LPL-Demo/
 
 3. Set up environment variables:
    ```bash
-   cp .env.example .env
+   cp env.example .env
    # Edit .env with your configuration
    ```
 
-### Running the Application
+### Running with Docker Compose
 
+Start JIRA, MySQL, and Postgres services:
 ```bash
-# Development mode
-npm run dev
+docker-compose up -d
+```
 
-# Production mode
-npm start
+### JIRA & MySQL Integration Workflow
 
-# Run tests
-npm test
+- **Query JIRA ticket status using MCP**
+- **Sync ticket data to MySQL**
+- **Update or query tickets from MySQL**
+
+#### Example: Sync JIRA Ticket to MySQL
+
+1. Query JIRA ticket status (using MCP or API)
+2. Insert or update the ticket in MySQL:
+   ```sql
+   INSERT INTO jira_table (issue_key, summary, description, priority, status, assignee, reporter, created, updated)
+   VALUES ('DEMO-1', 'Demo Ticket', 'Created via UI', 'Medium', 'In Progress', 'Unassigned', 'user@email.com', '2025-07-13 23:01:05', '2025-07-13 23:04:31')
+   ON DUPLICATE KEY UPDATE summary=VALUES(summary), description=VALUES(description), priority=VALUES(priority), status=VALUES(status), assignee=VALUES(assignee), reporter=VALUES(reporter), created=VALUES(created), updated=VALUES(updated);
+   ```
+
+#### Query Tickets from MySQL
+```bash
+docker run -it --rm mysql:8.0 mysql -h<mysql_host> -P3306 -u<user> -p<password> mydb -e "SELECT * FROM jira_table;"
 ```
 
 ## Features
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
+- [x] JIRA ticket status query via MCP
+- [x] Sync JIRA tickets to MySQL
+- [x] Docker Compose for multi-service orchestration
+- [ ] Automated ticket sync scripts
+- [ ] Web dashboard (coming soon)
 
 ## Contributing
 
@@ -78,4 +93,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-- Project Link: [https://github.com/yourusername/LPL-Demo](https://github.com/yourusername/LPL-Demo) 
+- Project Link: [https://github.com/vsusheel/LPL-Demo](https://github.com/vsusheel/LPL-Demo) 
