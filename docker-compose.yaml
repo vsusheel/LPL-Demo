@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  jira:
+    image: atlassian/jira-software:9.15.0
+    container_name: jira_server
+    environment:
+      - ATL_JDBC_URL=jdbc:postgresql://postgres_db:5432/mydb
+      - ATL_JDBC_USER=user
+      - ATL_JDBC_PASSWORD=password
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    volumes:
+      - jira_data:/var/atlassian/application-data/jira
+
+volumes:
+  postgres_data:
+  mysql_data:
+  jira_data: 
