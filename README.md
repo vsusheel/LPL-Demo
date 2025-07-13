@@ -18,7 +18,6 @@ LPL-Demo/
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
 - Python (v3.11)
 - Docker
 - Access to a JIRA instance (local or cloud)
@@ -33,7 +32,6 @@ LPL-Demo/
 
 2. Install dependencies:
    ```bash
-   npm install
    pip install -r requirements.txt
    ```
 
@@ -99,12 +97,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### Running Tests Locally
 
-- **Node.js tests:**
-  ```bash
-  npm test
-  ```
-  (Runs Jest if JS tests exist, otherwise runs Python tests)
-
 - **Python tests:**
   ```bash
   pytest
@@ -113,9 +105,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### CI/CD Process
 
 - On every push or pull request, GitHub Actions will:
-  1. Set up Node.js and Python environments
+  1. Set up Python environment
   2. Install dependencies
-  3. Run `npm test` (which will run both JS and Python tests if present)
+  3. Run `pytest`
   4. Report test results in the PR/build logs
 
-You can add your test files in the appropriate locations (e.g., `tests/` for Python, `src/__tests__/` for JS). 
+You can add your test files in the `tests/` directory. 
