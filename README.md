@@ -94,3 +94,28 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 
 - Project Link: [https://github.com/vsusheel/LPL-Demo](https://github.com/vsusheel/LPL-Demo) 
+
+## Testing & CI/CD
+
+### Running Tests Locally
+
+- **Node.js tests:**
+  ```bash
+  npm test
+  ```
+  (Runs Jest if JS tests exist, otherwise runs Python tests)
+
+- **Python tests:**
+  ```bash
+  pytest
+  ```
+
+### CI/CD Process
+
+- On every push or pull request, GitHub Actions will:
+  1. Set up Node.js and Python environments
+  2. Install dependencies
+  3. Run `npm test` (which will run both JS and Python tests if present)
+  4. Report test results in the PR/build logs
+
+You can add your test files in the appropriate locations (e.g., `tests/` for Python, `src/__tests__/` for JS). 
