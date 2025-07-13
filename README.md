@@ -19,7 +19,7 @@ LPL-Demo/
 ### Prerequisites
 
 - Node.js (v18 or higher)
-- Python (v3.8 or higher)
+- Python (v3.11)
 - Docker
 - Access to a JIRA instance (local or cloud)
 
