@@ -112,6 +112,57 @@
           }
         }
       }
+    },
+    "/useradd" : {
+      "post" : {
+        "tags" : [ "admins" ],
+        "summary" : "adds a user",
+        "description" : "Adds a new user to the system",
+        "operationId" : "addUser",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/useradd_body"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "user created successfully"
+          },
+          "400" : {
+            "description" : "invalid input, object invalid"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "admins" ],
+        "summary" : "deletes a user",
+        "description" : "Deletes a user from the system",
+        "operationId" : "deleteUser",
+        "parameters" : [ {
+          "name" : "username",
+          "in" : "query",
+          "description" : "username of the user to delete",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "user deleted successfully"
+          },
+          "404" : {
+            "description" : "user not found"
+          }
+        }
+      }
     }
   },
   "components" : {
@@ -155,6 +206,20 @@
           "phone" : {
             "type" : "string",
             "example" : "408-867-5309"
+          }
+        }
+      },
+      "useradd_body" : {
+        "type" : "object",
+        "properties" : {
+          "username" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
           }
         }
       }
