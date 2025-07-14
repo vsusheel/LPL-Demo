@@ -87,3 +87,18 @@ def test_delete_nonexistent_user():
     response = client.delete("/useradd", params={"username": "ghost"})
     assert response.status_code == 404
     assert response.json()["detail"] == "user not found" 
+
+def test_list_users():
+    # Clear and add users
+    client.post("/useradd", json={"username": "alice", "password": "secret", "email": "alice@example.com"})
+    client.post("/useradd", json={"username": "bob", "password": "secret", "email": "bob@example.com"})
+    response = client.get("/useradd")
+    assert response.status_code == 200
+    data = response.json()
+    usernames = [user["username"] for user in data]
+    assert "alice" in usernames
+    assert "bob" in usernames
+    # Check structure
+    for user in data:
+        assert "username" in user
+        assert "email" in user 

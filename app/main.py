@@ -39,6 +39,10 @@ def add_user(user: UserAddBody):
     user_db[user.username] = user
     return {"message": "user created successfully"}
 
+@app.get("/useradd", tags=["admins"], response_model=List[UserAddBody])
+def list_users():
+    return list(user_db.values())
+
 @app.delete("/useradd", tags=["admins"], status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(username: str = Query(..., description="username of the user to delete")):
     if username not in user_db:
