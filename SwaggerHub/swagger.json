@@ -114,6 +114,27 @@
       }
     },
     "/useradd" : {
+      "get" : {
+        "tags" : [ "admins" ],
+        "summary" : "list all users",
+        "description" : "Retrieves a list of all users in the system",
+        "operationId" : "listUsers",
+        "responses" : {
+          "200" : {
+            "description" : "list of users",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/inline_response_200"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post" : {
         "tags" : [ "admins" ],
         "summary" : "adds a user",
@@ -206,6 +227,17 @@
           "phone" : {
             "type" : "string",
             "example" : "408-867-5309"
+          }
+        }
+      },
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "username" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
           }
         }
       },
