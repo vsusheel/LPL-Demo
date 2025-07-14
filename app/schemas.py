@@ -13,3 +13,8 @@ class InventoryItem(BaseModel):
     name: str
     releaseDate: datetime
     manufacturer: Manufacturer 
+
+class UserAddBody(BaseModel):
+    username: str
+    password: str
+    email: Optional[str] = None 

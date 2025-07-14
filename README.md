@@ -127,6 +127,42 @@ curl -X POST "http://localhost:8000/inventory" \
 curl "http://localhost:8000/inventory"
 ```
 
+## User Management API
+
+### Endpoints
+
+#### `POST /useradd`
+- **Description:** Add a new user.
+- **Request Body:**
+  - JSON object with:
+    - `username` (string, required)
+    - `password` (string, required)
+    - `email` (string, optional)
+- **Responses:**
+  - `201 Created`: User created successfully.
+  - `400 Bad Request`: User already exists.
+
+**Example:**
+```json
+{
+  "username": "alice",
+  "password": "secret",
+  "email": "alice@example.com"
+}
+```
+
+#### `DELETE /useradd`
+- **Description:** Delete a user by username.
+- **Query Parameter:**
+  - `username` (string, required)
+- **Responses:**
+  - `204 No Content`: User deleted successfully.
+  - `404 Not Found`: User not found.
+
+---
+
+**Note:** User storage is in-memory and resets on app restart. For production, integrate with a persistent database.
+
 ## Docker Compose Services
 
 - `webservice`: Runs the FastAPI app on port 8000.
@@ -174,3 +210,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
   4. Report test results in the PR/build logs
 
 You can add your test files in the `tests/` directory. 
+
+Would you like me to run this command for you now?

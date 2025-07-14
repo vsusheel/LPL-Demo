@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 from app.main import app
 from uuid import uuid4
 from datetime import datetime
+from app.schemas import UserAddBody
 
 client = TestClient(app)
 
@@ -62,3 +63,27 @@ def test_pagination():
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 2 
+
+def test_add_user():
+    user = {"username": "alice", "password": "secret", "email": "alice@example.com"}
+    response = client.post("/useradd", json=user)
+    assert response.status_code == 201
+    assert response.json()["message"] == "user created successfully"
+
+def test_add_duplicate_user():
+    user = {"username": "bob", "password": "secret", "email": "bob@example.com"}
+    client.post("/useradd", json=user)
+    response = client.post("/useradd", json=user)
+    assert response.status_code == 400
+    assert response.json()["detail"] == "User already exists"
+
+def test_delete_user():
+    user = {"username": "charlie", "password": "secret", "email": "charlie@example.com"}
+    client.post("/useradd", json=user)
+    response = client.delete("/useradd", params={"username": "charlie"})
+    assert response.status_code == 204
+
+def test_delete_nonexistent_user():
+    response = client.delete("/useradd", params={"username": "ghost"})
+    assert response.status_code == 404
+    assert response.json()["detail"] == "user not found" 

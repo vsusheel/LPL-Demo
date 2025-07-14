@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Query, HTTPException, status
 from typing import List, Optional
-from .schemas import InventoryItem
+from .schemas import InventoryItem, UserAddBody
 from uuid import uuid4
 from datetime import datetime
 
@@ -8,6 +8,9 @@ app = FastAPI(title="Simple Inventory API", description="This is a simple API", 
 
 # In-memory storage for demonstration
 inventory_db: List[InventoryItem] = []
+
+# In-memory user storage
+user_db = {}
 
 @app.get("/inventory", response_model=List[InventoryItem], tags=["developers"])
 def search_inventory(
@@ -28,3 +31,17 @@ def add_inventory(item: InventoryItem):
             raise HTTPException(status_code=409, detail="An existing item already exists")
     inventory_db.append(item)
     return item 
+
+@app.post("/useradd", tags=["admins"], status_code=status.HTTP_201_CREATED)
+def add_user(user: UserAddBody):
+    if user.username in user_db:
+        raise HTTPException(status_code=400, detail="User already exists")
+    user_db[user.username] = user
+    return {"message": "user created successfully"}
+
+@app.delete("/useradd", tags=["admins"], status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(username: str = Query(..., description="username of the user to delete")):
+    if username not in user_db:
+        raise HTTPException(status_code=404, detail="user not found")
+    del user_db[username]
+    return None 
