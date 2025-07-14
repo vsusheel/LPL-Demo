@@ -69,6 +69,69 @@ docker-compose up -d
 docker run -it --rm mysql:8.0 mysql -h<mysql_host> -P3306 -u<user> -p<password> mydb -e "SELECT * FROM jira_table;"
 ```
 
+## Inventory API
+
+### Endpoints
+
+#### `GET /inventory`
+- **Description:** Search inventory items.
+- **Query Parameters:**
+  - `searchString` (optional, string): Search by name.
+  - `skip` (optional, int): Pagination offset.
+  - `limit` (optional, int, max 50): Pagination limit.
+- **Response:**
+  - `200 OK`: List of inventory items (see schema below).
+
+#### `POST /inventory`
+- **Description:** Add a new inventory item.
+- **Request Body:**
+  - JSON object matching the `InventoryItem` schema (see below).
+- **Responses:**
+  - `201 Created`: Item added successfully.
+  - `409 Conflict`: Item with the same `id` already exists.
+
+### InventoryItem Schema
+```json
+{
+  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851", // string, uuid, required
+  "name": "Widget Adapter",                  // string, required
+  "releaseDate": "2016-08-29T09:12:33.001Z", // string, date-time, required
+  "manufacturer": {                           // Manufacturer object, required
+    "name": "ACME Corporation",              // string, required
+    "homePage": "https://www.acme-corp.com", // string, url, optional
+    "phone": "408-867-5309"                  // string, optional
+  }
+}
+```
+
+### Example Usage
+
+**Add an item:**
+```bash
+curl -X POST "http://localhost:8000/inventory" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+    "name": "Widget Adapter",
+    "releaseDate": "2016-08-29T09:12:33.001Z",
+    "manufacturer": {
+      "name": "ACME Corporation",
+      "homePage": "https://www.acme-corp.com",
+      "phone": "408-867-5309"
+    }
+  }'
+```
+
+**Get all items:**
+```bash
+curl "http://localhost:8000/inventory"
+```
+
+## Docker Compose Services
+
+- `webservice`: Runs the FastAPI app on port 8000.
+- `test-eval`: Runs all tests using pytest for live feedback.
+
 ## Features
 
 - [x] JIRA ticket status query via MCP

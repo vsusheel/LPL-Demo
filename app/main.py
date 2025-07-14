@@ -1,6 +1,8 @@
-from fastapi import FastAPI, Query, HTTPException
+from fastapi import FastAPI, Query, HTTPException, status
 from typing import List, Optional
 from .schemas import InventoryItem
+from uuid import uuid4
+from datetime import datetime
 
 app = FastAPI(title="Simple Inventory API", description="This is a simple API", version="1.0.0")
 
@@ -18,8 +20,11 @@ def search_inventory(
         results = [item for item in results if searchString.lower() in item.name.lower()]
     return results[skip:skip+limit]
 
-@app.post("/inventory", response_model=InventoryItem, tags=["admins"])
+@app.post("/inventory", response_model=InventoryItem, tags=["admins"], status_code=status.HTTP_201_CREATED)
 def add_inventory(item: InventoryItem):
-    item.id = len(inventory_db) + 1
+    # Check for duplicate by id
+    for existing in inventory_db:
+        if existing.id == item.id:
+            raise HTTPException(status_code=409, detail="An existing item already exists")
     inventory_db.append(item)
     return item 

@@ -39,6 +39,35 @@ services:
     volumes:
       - jira_data:/var/atlassian/application-data/jira
 
+  webservice:
+    build: .
+    container_name: webservice
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - mysql
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./app:/app/app
+      - ./requirements.txt:/app/requirements.txt
+      - ./env.example:/app/.env
+
+  test-eval:
+    build: .
+    container_name: test_eval
+    command: ["pytest", "tests", "--maxfail=1", "--disable-warnings", "-v"]
+    depends_on:
+      - webservice
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./app:/app/app
+      - ./tests:/app/tests
+      - ./requirements.txt:/app/requirements.txt
+      - ./env.example:/app/.env
+
 volumes:
   postgres_data:
   mysql_data:
